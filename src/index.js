@@ -1,60 +1,51 @@
 //-------------- Импортируем сюда данные из других файлов
 import './sass/main.scss';
 import product_itemTpl from './templates/product-item.hbs';
-import products from './menu.json';
+import menu from './menu.json';
 
 
-//console.log('product_itemTpl = ', product_itemTpl(products[0]));
+const refs = {
+  productsMenuRef: document.querySelector('ul.js-menu'),
+  bodyRef: document.querySelector('body'),
+  switchRef: document.querySelector('#theme-switch-toggle'),
+};
 
-const productsMenuRef = document.querySelector('ul.js-menu');
-const cardsMarkup = createProductsMenu(products);
 
-productsMenuRef.insertAdjacentHTML('beforeend', cardsMarkup);
+const cardsMarkup = createProductsMenu(menu);
+refs.productsMenuRef.insertAdjacentHTML('beforeend', cardsMarkup);
 
-function createProductsMenu(products) {
- // return products.map(product => product_itemTpl(product)).join('');
+function createProductsMenu(menu) {
+  // return menu.map(product => product_itemTpl(product)).join('');
   // или более краткая запись
- return products.map(product_itemTpl).join('');
+ return menu.map(product_itemTpl).join('');
  }
 
- const Theme = {
+const Theme = {
   LIGHT: 'light-theme',
   DARK: 'dark-theme',
 };
 
+refs.switchRef.addEventListener('change', changeTheme);
 
-localStorage.setItem('LIGHT', 'light-theme');
-localStorage.setItem('DARK',  'dark-theme');
-
-
-const themeOfProductsMenuRef = document.querySelector('body');
-
-const checkboxRef = document.querySelector('#theme-switch-toggle');
-
-//console.log ('checkboxRef ', checkboxRef.getAttribute('checked'))
-
-
-if (checkboxRef.getAttribute('checked')!==null) {
-    console.log('It`s checked');
+if (localStorage.getItem('theme') === Theme.DARK) {
+    refs.bodyRef.classList.add(Theme.DARK);
+    refs.switchRef.checked = true;
+    
+} else {
+  refs. bodyRef.classList.add(Theme.LIGHT);
+  localStorage.setItem('theme', Theme.LIGHT);
 }
 
-
-
-
-
-
-
-
-/*
-themeOfProductsMenuRef.addEventListener('scrpll', changeTheme);
-
-function changeTheme (event) {
-    event.preventDefault();
-    themeOfProductsMenuRef.classList.add('dark-theme');
-};
-
-*/
-
-
+function changeTheme() {
+  if (refs. bodyRef.classList.contains(Theme.DARK)) {
+    refs. bodyRef.classList.remove(Theme.DARK);
+    refs. bodyRef.classList.add(Theme.LIGHT);
+    localStorage.setItem('theme', Theme.LIGHT);
+  } else {
+    refs. bodyRef.classList.remove(Theme.LIGHT);
+    refs. bodyRef.classList.add(Theme.DARK);
+    localStorage.setItem('theme', Theme.DARK);
+  }
+}
 
 
